@@ -1,4 +1,4 @@
-defmodule CoreIdentityElixir.MockServer do
+defmodule CoreIdentityElixir.CoreIdentity.Mock do
   def request(:get, "localhost/api/v1/oauth/certs", "", _headers, _params) do
     {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(certs())}}
   end
@@ -120,6 +120,14 @@ defmodule CoreIdentityElixir.MockServer do
     }
   end
 
+  # {
+  #     "authenticated_at": "2022-12-18T05:16:10Z",
+  #     "authenticated_by": "CoreIdentity",
+  #     "email": "faranggorira@gmail.com",
+  #     "owner": "CoreIdentity.Identities.User",
+  #     "response": "CurrentUser",
+  #     "uuid": "user_e4dfcb4f-698d-4be4-8377-927e50b7d352"
+  # }
   def certs do
     [
       %{

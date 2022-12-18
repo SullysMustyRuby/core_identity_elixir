@@ -46,14 +46,12 @@ defmodule CoreIdentityElixir.UsersTest do
     test "Returns verification failed with wrong code" do
       wrong_code = 7777
 
-      {:error, response} =
+      assert {:error, "Returned status: 400 with message: {\"error\":\"verification failed\"}"} ==
         Users.validate_verification_code("core_identity", "reference", wrong_code)
-
-      assert response == "{\"error\":\"verification failed\"}"
     end
 
     test "Returns bad request code with invalid code" do
-      assert {:error, "bad request"} ==
+      assert {:error, "Returned status: 400 with message: bad request"} ==
                Users.validate_verification_code("core_identity", "reference", "invalid code")
     end
   end

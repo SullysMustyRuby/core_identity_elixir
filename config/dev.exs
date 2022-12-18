@@ -1,3 +1,3 @@
 use Mix.Config
 
-config :phoenix, :json_library, Jason
+config :core_identity_elixir, :http_client, CoreIdentityElixir.CoreIdentity.Mock

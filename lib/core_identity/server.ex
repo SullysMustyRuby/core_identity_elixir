@@ -1,9 +1,9 @@
 defmodule CoreIdentityElixir.CoreIdentity.Server do
   @moduledoc false
 
-  @http Application.get_env(:core_identity_elixir, :http) || HTTPoison
-  @default_url "https://stage-identity.hubsynch.com"
-  @default_api "/api/v1"
+  @http Application.compile_env(:core_identity_elixir, :http_client)
+  @default_url Application.compile_env(:core_identity_elixir, :core_identity_url)
+  @default_api Application.compile_env(:core_identity_elixir, :core_identity_api_version)
 
   def authenticate(params) do
     post("/providers/core_identity", params, %{type: :public})
@@ -65,12 +65,6 @@ defmodule CoreIdentityElixir.CoreIdentity.Server do
 
   defp get_headers(_), do: private_headers()
 
-  defp parse_response({:ok, %HTTPoison.Response{status_code: 400, body: message}}),
-    do: {:error, message}
-
-  defp parse_response({:ok, %HTTPoison.Response{status_code: 401, body: message}}),
-    do: {:error, message}
-
   defp parse_response({:ok, %HTTPoison.Response{status_code: 202, body: message}}),
     do: {:ok, message}
 
@@ -78,6 +72,9 @@ defmodule CoreIdentityElixir.CoreIdentity.Server do
     body
     |> Jason.decode()
   end
+
+  defp parse_response({:ok, %HTTPoison.Response{status_code: status_code, body: message}}),
+  do: {:error, "Returned status: #{status_code} with message: #{message}"}
 
   defp public_headers do
     [

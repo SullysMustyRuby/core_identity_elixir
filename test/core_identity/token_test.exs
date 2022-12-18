@@ -2,10 +2,11 @@ defmodule CoreIdentityElixir.CoreIdentity.TokenTest do
   use ExUnit.Case
 
   alias CoreIdentityElixir.CoreIdentity.Token
+  alias CoreIdentityElixir.CoreIdentity.Mock
 
   describe "parse/1" do
     test "returns user params from claims when token is valid" do
-      tokens = CoreIdentityElixir.MockServer.tokens()
+      tokens = Mock.tokens()
       assert {:ok, user_params} = Token.parse(tokens[:access_token])
       assert user_params[:uid] == "380549d1-cf9a-4bcb-b671-a2667e8d2301"
       assert user_params[:user_type] == "Identities.User"

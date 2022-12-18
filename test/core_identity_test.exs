@@ -2,6 +2,7 @@ defmodule CoreIdentityElixir.CoreIdentityTest do
   use ExUnit.Case
 
   alias CoreIdentityElixir.CoreIdentity
+  alias CoreIdentityElixir.CoreIdentity.Mock
 
   describe "authenticate/1" do
     test "returns the decoded body when successful" do
@@ -13,7 +14,7 @@ defmodule CoreIdentityElixir.CoreIdentityTest do
 
     test "returns error when authentication fails" do
       params = %{email: "nope@archer.com", password: "password"}
-      assert {:error, "bad request"} == CoreIdentity.authenticate(params)
+      assert {:error, "Returned status: 400 with message: bad request"} == CoreIdentity.authenticate(params)
     end
   end
 
@@ -44,7 +45,7 @@ defmodule CoreIdentityElixir.CoreIdentityTest do
 
   describe "parse_token/1" do
     test "returns user params from claims when token is valid" do
-      tokens = CoreIdentityElixir.MockServer.tokens()
+      tokens = Mock.tokens()
 
       assert {:ok, user_params} =
                CoreIdentity.parse_token(%{"access_token" => tokens[:access_token]})

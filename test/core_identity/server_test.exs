@@ -13,7 +13,7 @@ defmodule CoreIdentityElixir.CoreIdentity.ServerTest do
 
     test "returns error when authentication fails" do
       params = %{email: "nope@archer.com", password: "password"}
-      assert {:error, "bad request"} == Server.authenticate(params)
+      assert {:error, "Returned status: 400 with message: bad request"} == Server.authenticate(params)
     end
   end
 

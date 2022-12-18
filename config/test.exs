@@ -14,8 +14,8 @@ config :core_identity_elixir, CoreIdentityElixir.TestEndpoint,
 
 config :phoenix, :json_library, Jason
 
-config :core_identity_elixir, :http, CoreIdentityElixir.MockServer
-config :core_identity_elixir, :url, "localhost"
+config :core_identity_elixir, :http_client, CoreIdentityElixir.CoreIdentity.Mock
+config :core_identity_elixir, :core_identity_url, "localhost"
 config :core_identity_elixir, :destroy_cookie, true
 # Print only warnings and errors during test
 config :logger, level: :warn

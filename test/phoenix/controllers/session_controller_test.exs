@@ -1,5 +1,6 @@
 defmodule CoreIdentityElixir.Phoenix.Controllers.SessionControllerTest do
   use CoreIdentityElixir.ConnCase
+  alias CoreIdentityElixir.CoreIdentity.Mock
 
   describe "new/2" do
     test "redirects to CoreIdentity", %{conn: conn} do
@@ -27,7 +28,7 @@ defmodule CoreIdentityElixir.Phoenix.Controllers.SessionControllerTest do
          %{conn: conn} do
       response =
         conn
-        |> init_test_session(%{current_user: CoreIdentityElixir.MockServer.current_user()})
+        |> init_test_session(%{current_user: Mock.current_user()})
         |> put_req_cookie("_core_identity_access", "test_cookie_id")
         |> delete(Routes.session_path(conn, :destroy))
 
