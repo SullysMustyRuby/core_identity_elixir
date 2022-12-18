@@ -13,8 +13,8 @@ defmodule CoreIdentityElixir.MixProject do
       description: description(),
       package: package(),
       name: "CoreIdentityElixir",
-      source_url: "https://github.com/ErinHivelociy/core_identity_elixir",
-      homepage_url: "https://stage-identity.hubsynch.com/",
+      source_url: "https://github.com/SullysMustyRuby/core_identity_elixir",
+      homepage_url: "https://core-apis.com//",
       docs: [main: "CoreIdentityElixir.CoreIdentity", extras: ["README.md"]]
     ]
   end
@@ -50,7 +50,7 @@ defmodule CoreIdentityElixir.MixProject do
     [
       maintainers: ["Erin Boeger"],
       licenses: ["Apache 2.0"],
-      links: %{"GitHub" => "https://github.com/ErinHivelociy/core_identity_elixir"}
+      links: %{"GitHub" => "https://github.com/SullysMustyRuby/core_identity_elixir"}
     ]
   end
 end

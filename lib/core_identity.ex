@@ -1,11 +1,10 @@
 defmodule CoreIdentityElixir.CoreIdentity do
   @moduledoc """
   An Elixir Package designed to make implementing CoreIdentity authentication easy and fast.
-  In order to use this package you need to have an account with [CoreIdentity](https://stage-identity.hubsynch.com/)
+  In order to use this package you need to have an account with [CoreServer](https://core-apis.com/)
 
-  Currently this is only for [Hivelocity](https://www.hivelocity.co.jp/) uses. If you have a
-  commercial interest please contact the Package Manager Erin Boeger through linkedIn or Github or
-  through [Hivelocity](https://www.hivelocity.co.jp/contact/).
+  Currently this is only for internal uses. If you have a commercial interest please contact the Package Manager 
+  Erin Boeger through linkedIn or Github 
   """
 
   alias CoreIdentityElixir.CoreIdentity.{Server, Token}
@@ -18,10 +17,10 @@ defmodule CoreIdentityElixir.CoreIdentity do
 
   ## Examples
 
-      iex> CoreIdentityElixir.CoreIdentity.authenticate(%{email: "erin@hivelocity.co.jp", password: "password"})
+      iex> CoreIdentityElixir.CoreIdentity.authenticate(%{email: "erin@core_apis.co.jp", password: "password"})
       {:ok, %{"access_token" => access_token, "refresh_token" => refresh_token}}
 
-      iex> CoreIdentityElixir.CoreIdentity.authenticate(%{email: "erin@hivelocity.co.jp", password: "wrong"})
+      iex> CoreIdentityElixir.CoreIdentity.authenticate(%{email: "erin@core_apis.co.jp", password: "wrong"})
       {:error, "bad request"}
 
   """

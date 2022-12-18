@@ -11,14 +11,14 @@ defmodule CoreIdentityElixir.Users do
       [
         %{
           "Object" => "Email",
-          "address" => "test@hivelocity.co.jp",
+          "address" => "test@core_apis.co.jp",
           "confirmed_at" => "2021-04-07T02:52:31Z",
           "primary" => true,
           "uid" => "81b7d2ef-43ef-42f8-922d-62602eac518a"
         },
         %{
           "Object" => "Email",
-          "address" => "test2@hivelocity.co.jp",
+          "address" => "test2@core_apis.co.jp",
           "confirmed_at" => "2021-06-03T07:59:55Z",
           "primary" => false,
           "uid" => "8c8c09a7-b500-430c-a45c-569bd9fa5a08"

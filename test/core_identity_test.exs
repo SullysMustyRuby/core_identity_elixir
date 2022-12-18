@@ -5,7 +5,7 @@ defmodule CoreIdentityElixir.CoreIdentityTest do
 
   describe "authenticate/1" do
     test "returns the decoded body when successful" do
-      params = %{email: "erin@hivelocity.co.jp", password: "password"}
+      params = %{email: "erin@core_apis.co.jp", password: "password"}
       assert {:ok, tokens} = CoreIdentity.authenticate(params)
       assert tokens["access_token"] != nil
       assert tokens["refresh_token"] != nil
