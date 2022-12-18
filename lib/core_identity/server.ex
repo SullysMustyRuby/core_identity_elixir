@@ -6,7 +6,7 @@ defmodule CoreIdentityElixir.CoreIdentity.Server do
   @default_api Application.compile_env(:core_identity_elixir, :core_identity_api_version)
 
   def authenticate(params) do
-    post("/providers/core_identity", params, %{type: :public})
+    post("/users/authenticate", params, %{type: :public})
   end
 
   def base_url do
@@ -74,7 +74,7 @@ defmodule CoreIdentityElixir.CoreIdentity.Server do
   end
 
   defp parse_response({:ok, %HTTPoison.Response{status_code: status_code, body: message}}),
-  do: {:error, "Returned status: #{status_code} with message: #{message}"}
+    do: {:error, "Returned status: #{status_code} with message: #{message}"}
 
   defp public_headers do
     [

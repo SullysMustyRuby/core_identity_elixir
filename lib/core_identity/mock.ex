@@ -8,16 +8,17 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
   end
 
   def request(:get, "localhost/api/v1/current_user/test_cookie_id", "", _headers, _params) do
-    {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(current_user())}}
+    # {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(current_user())}}
+    current_user_response()
   end
 
   def request(:get, "localhost/api/v1/users/user_uid/emails", "", _headers, _params) do
     {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(emails())}}
   end
 
-  def post("localhost/api/v1/providers/core_identity", body, _headers) do
+  def post("localhost/api/v1/users/authenticate", body, _headers) do
     case Jason.decode!(body) do
-      %{"email" => "erin@core_apis.co.jp"} -> token_response()
+      %{"email" => email, "password" => "successful"} -> current_user_response(email)
       _ -> fail_response()
     end
   end
@@ -48,7 +49,7 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
 
   def put("localhost/api/v1/providers/core_identity", body, _headers) do
     case Jason.decode!(body) do
-      %{"email" => "erin@core_apis.co.jp"} -> token_response()
+      %{"email" => "erin@core_apis.co.jp"} -> token_response("erin@core_apis.co.jp")
       _ -> fail_response()
     end
   end
@@ -63,19 +64,23 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
     end
   end
 
-  def delete(_url, _headers),
-    do: {:ok, %HTTPoison.Response{status_code: 202, body: "successful operation"}}
+  def current_user(email \\ nil)
 
-  def current_user do
+  def current_user(email) when is_binary(email) do
     %{
       "authenticated_at" => "2022-12-18T05:16:10Z",
       "authenticated_by" => "CoreIdentity",
-      "email" => "faranggorira@gmail.com",
+      "email" => email,
       "owner" => "CoreIdentity.Identities.User",
       "response" => "CurrentUser",
       "uuid" => "user_e4dfcb4f-698d-4be4-8377-927e50b7d352"
-  }
+    }
   end
+
+  def current_user(_), do: current_user("faranggorira@gmail.com")
+
+  def delete(_url, _headers),
+    do: {:ok, %HTTPoison.Response{status_code: 202, body: "successful operation"}}
 
   def emails do
     [
@@ -94,16 +99,6 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
         "uid" => "8c8c09a7-b500-430c-a45c-569bd9fa5a08"
       }
     ]
-  end
-
-  # This is a valid set of tokens to test with. The signature will validate with the certs below
-  def tokens do
-    %{
-      access_token:
-        "eyJraWQiOiJvNFhRbVNLTHlLN1I0ejhDUWRLaVNDQVQ4ZmhnWFlNVWRLUUlUU0Rra2xJIiwiYWxnIjoiUlMyNTYiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwczovL3N0YWdlLWlkZW50aXR5Lmh1YnN5bmNoLmNvbSIsImVtYWlsIjoiZXJpbkBoaXZlbG9jaXR5LmNvLmpwIiwiZXhwIjoxNjE0NjU1NDM1LCJpYXQiOjE2MTQ2NTE4MzUsImlzcyI6Ikh1YklkZW50aXR5IiwianRpIjoiOTQ1ZmI4OTQtMmNhNi00ZDg2LWExNjMtOGRlN2E5M2QxNjNhIiwibmJmIjoxNjE0NjUxODM0LCJvd25lcl90eXBlIjpudWxsLCJvd25lcl91aWQiOm51bGwsInN1YiI6IklkZW50aXRpZXMuVXNlcjozODA1NDlkMS1jZjlhLTRiY2ItYjY3MS1hMjY2N2U4ZDIzMDEiLCJ0eXAiOiJhY2Nlc3MiLCJ1aWQiOiIzODA1NDlkMS1jZjlhLTRiY2ItYjY3MS1hMjY2N2U4ZDIzMDEifQ.nesXK09oqUIYZWNdphzcA4IbXGaOlMUd_dH_NjprRspBrlNhq4P78ou62bVcBu5vmL3kSqEwXsGDnjJTSApPRn8XvojmC72QG8_Ld2uv3n13alQmTFckq50sLRzqrzJad_oYTpZsjVi2yoHK35H_2BLwKQk5GpkKV6UIB8y7KntsLOZvS1RC5bwIP1paqTP-_bT3N1UnDeWDZkUL-vlfNTinMutOqz_GQGR1wVim4hJ7mEauDgyZxUJR5GiLdTXGLo4-0I1MDfuI3j4CLCvgt1YFgKikfiONZFzFL6vlJY0MwAU6ytGvJKJ1EZqozs4rbhBnLMpe6wCIglvITAXlSw",
-      refresh_token:
-        "eyJraWQiOiJvNFhRbVNLTHlLN1I0ejhDUWRLaVNDQVQ4ZmhnWFlNVWRLUUlUU0Rra2xJIiwiYWxnIjoiUlMyNTYiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwczovL3N0YWdlLWlkZW50aXR5Lmh1YnN5bmNoLmNvbSIsImV4cCI6MTYxNDY5NTAzNSwiaWF0IjoxNjE0NjUxODM1LCJpc3MiOiJIdWJJZGVudGl0eSIsImp0aSI6ImU0ZWQ2ZGZjLTA1YjQtNGVlNS1iYmVlLTY1NjA3YmM4N2EwNCIsIm5iZiI6MTYxNDY1MTgzNCwic3ViIjoiSWRlbnRpdGllcy5Vc2VyOjM4MDU0OWQxLWNmOWEtNGJjYi1iNjcxLWEyNjY3ZThkMjMwMSIsInR5cCI6InJlZnJlc2gifQ.bboodWqsiq8ErLcT0puF0ZYfyyjrtY_NY7LMilTNaAigzMud-KxQN-P6W6pZYm2qYTtb5JtabrA0KAEY5Q81XWMQta2Ard52uc9Eezw9JHZ03Mbiqw3vSPz71L4z7YBxEhGWmmrPd7ReeKcc3ImdX-lk2KouaVEiB3Ur17YweO0Eq8vx4-8rSEqKvwn7ibuGA8FotY7CWsvPZlUMsm7B__jyRdeuQ6qy1cfNauSM-SbjvVIRs3WCn0DMkCdAenO8S6HKvueDSAW8-wEwHqcum7Soex409D9Cjh0JUgf7eGfz2xXsPyFt22h0eDAMZT9fZsxjki1a_3FRvaUDzVpIig"
-    }
   end
 
   defp email(address) do
@@ -158,12 +153,34 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
     ]
   end
 
-  defp token_response do
-    {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(tokens())}}
+  # This is a valid set of tokens to test with. The signature will validate with the certs below
+  def tokens do
+    %{
+      access_token:
+        "eyJraWQiOiJvNFhRbVNLTHlLN1I0ejhDUWRLaVNDQVQ4ZmhnWFlNVWRLUUlUU0Rra2xJIiwiYWxnIjoiUlMyNTYiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwczovL3N0YWdlLWlkZW50aXR5Lmh1YnN5bmNoLmNvbSIsImVtYWlsIjoiZXJpbkBoaXZlbG9jaXR5LmNvLmpwIiwiZXhwIjoxNjE0NjU1NDM1LCJpYXQiOjE2MTQ2NTE4MzUsImlzcyI6Ikh1YklkZW50aXR5IiwianRpIjoiOTQ1ZmI4OTQtMmNhNi00ZDg2LWExNjMtOGRlN2E5M2QxNjNhIiwibmJmIjoxNjE0NjUxODM0LCJvd25lcl90eXBlIjpudWxsLCJvd25lcl91aWQiOm51bGwsInN1YiI6IklkZW50aXRpZXMuVXNlcjozODA1NDlkMS1jZjlhLTRiY2ItYjY3MS1hMjY2N2U4ZDIzMDEiLCJ0eXAiOiJhY2Nlc3MiLCJ1aWQiOiIzODA1NDlkMS1jZjlhLTRiY2ItYjY3MS1hMjY2N2U4ZDIzMDEifQ.nesXK09oqUIYZWNdphzcA4IbXGaOlMUd_dH_NjprRspBrlNhq4P78ou62bVcBu5vmL3kSqEwXsGDnjJTSApPRn8XvojmC72QG8_Ld2uv3n13alQmTFckq50sLRzqrzJad_oYTpZsjVi2yoHK35H_2BLwKQk5GpkKV6UIB8y7KntsLOZvS1RC5bwIP1paqTP-_bT3N1UnDeWDZkUL-vlfNTinMutOqz_GQGR1wVim4hJ7mEauDgyZxUJR5GiLdTXGLo4-0I1MDfuI3j4CLCvgt1YFgKikfiONZFzFL6vlJY0MwAU6ytGvJKJ1EZqozs4rbhBnLMpe6wCIglvITAXlSw",
+      refresh_token:
+        "eyJraWQiOiJvNFhRbVNLTHlLN1I0ejhDUWRLaVNDQVQ4ZmhnWFlNVWRLUUlUU0Rra2xJIiwiYWxnIjoiUlMyNTYiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwczovL3N0YWdlLWlkZW50aXR5Lmh1YnN5bmNoLmNvbSIsImV4cCI6MTYxNDY5NTAzNSwiaWF0IjoxNjE0NjUxODM1LCJpc3MiOiJIdWJJZGVudGl0eSIsImp0aSI6ImU0ZWQ2ZGZjLTA1YjQtNGVlNS1iYmVlLTY1NjA3YmM4N2EwNCIsIm5iZiI6MTYxNDY1MTgzNCwic3ViIjoiSWRlbnRpdGllcy5Vc2VyOjM4MDU0OWQxLWNmOWEtNGJjYi1iNjcxLWEyNjY3ZThkMjMwMSIsInR5cCI6InJlZnJlc2gifQ.bboodWqsiq8ErLcT0puF0ZYfyyjrtY_NY7LMilTNaAigzMud-KxQN-P6W6pZYm2qYTtb5JtabrA0KAEY5Q81XWMQta2Ard52uc9Eezw9JHZ03Mbiqw3vSPz71L4z7YBxEhGWmmrPd7ReeKcc3ImdX-lk2KouaVEiB3Ur17YweO0Eq8vx4-8rSEqKvwn7ibuGA8FotY7CWsvPZlUMsm7B__jyRdeuQ6qy1cfNauSM-SbjvVIRs3WCn0DMkCdAenO8S6HKvueDSAW8-wEwHqcum7Soex409D9Cjh0JUgf7eGfz2xXsPyFt22h0eDAMZT9fZsxjki1a_3FRvaUDzVpIig"
+    }
+  end
+
+  defp current_user_response(email \\ nil)
+
+  defp current_user_response(email) do
+    body = email |> current_user() |> Jason.encode!()
+
+    {:ok, %HTTPoison.Response{status_code: 200, body: body}}
   end
 
   defp email_response(address) do
     {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(email(address))}}
+  end
+
+  defp fail_response do
+    {:ok, %HTTPoison.Response{status_code: 400, body: "bad request"}}
+  end
+
+  defp token_response(email) do
+    {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(tokens())}}
   end
 
   defp verification_response() do
@@ -178,9 +195,5 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
       _ ->
         {:ok, %HTTPoison.Response{status_code: 400, body: "{\"error\":\"verification failed\"}"}}
     end
-  end
-
-  defp fail_response do
-    {:ok, %HTTPoison.Response{status_code: 400, body: "bad request"}}
   end
 end

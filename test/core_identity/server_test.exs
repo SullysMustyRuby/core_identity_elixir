@@ -5,15 +5,22 @@ defmodule CoreIdentityElixir.CoreIdentity.ServerTest do
 
   describe "authenticate/1" do
     test "returns the decoded body when successful" do
-      params = %{email: "erin@core_apis.co.jp", password: "password"}
-      assert {:ok, tokens} = Server.authenticate(params)
-      assert tokens["access_token"] != nil
-      assert tokens["refresh_token"] != nil
+      params = %{email: "erin@core_apis.co.jp", password: "successful"}
+      assert {:ok, current_user} = Server.authenticate(params)
+
+      assert current_user["authenticated_at"] != nil
+      assert current_user["authenticated_by"] != nil
+      assert current_user["email"] == "erin@core_apis.co.jp"
+      assert current_user["owner"] == "CoreIdentity.Identities.User"
+      assert current_user["response"] == "CurrentUser"
+      assert current_user["uuid"] != nil
     end
 
     test "returns error when authentication fails" do
       params = %{email: "nope@archer.com", password: "password"}
-      assert {:error, "Returned status: 400 with message: bad request"} == Server.authenticate(params)
+
+      assert {:error, "Returned status: 400 with message: bad request"} ==
+               Server.authenticate(params)
     end
   end
 
