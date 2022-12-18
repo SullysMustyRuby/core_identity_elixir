@@ -18,8 +18,10 @@ defmodule CoreIdentityElixir.Phoenix.Controllers.SessionControllerTest do
       assert redirected_to(response) == "/"
       current_user = get_session(response, :current_user)
 
-      assert current_user["uid"] == "380549d1-cf9a-4bcb-b671-a2667e8d2301"
-      assert current_user["user_type"] == "Identities.User"
+      assert current_user["email"] == "faranggorira@gmail.com"
+      assert current_user["owner"] == "CoreIdentity.Identities.User"
+      assert current_user["response"] == "CurrentUser"
+      assert current_user["uuid"] == "user_e4dfcb4f-698d-4be4-8377-927e50b7d352"
     end
   end
 

@@ -68,10 +68,13 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
 
   def current_user do
     %{
-      "Object" => "CurrentUser",
-      "uid" => "380549d1-cf9a-4bcb-b671-a2667e8d2301",
-      "user_type" => "Identities.User"
-    }
+      "authenticated_at" => "2022-12-18T05:16:10Z",
+      "authenticated_by" => "CoreIdentity",
+      "email" => "faranggorira@gmail.com",
+      "owner" => "CoreIdentity.Identities.User",
+      "response" => "CurrentUser",
+      "uuid" => "user_e4dfcb4f-698d-4be4-8377-927e50b7d352"
+  }
   end
 
   def emails do
@@ -94,13 +97,6 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
   end
 
   # This is a valid set of tokens to test with. The signature will validate with the certs below
-  # The user will be:
-  # %{
-  #   owner_type: nil,
-  #   owner_uid: nil,
-  #   uid: "380549d1-cf9a-4bcb-b671-a2667e8d2301",
-  #   user_type: "Identities.User"
-  # }
   def tokens do
     %{
       access_token:
@@ -120,14 +116,6 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
     }
   end
 
-  # {
-  #     "authenticated_at": "2022-12-18T05:16:10Z",
-  #     "authenticated_by": "CoreIdentity",
-  #     "email": "faranggorira@gmail.com",
-  #     "owner": "CoreIdentity.Identities.User",
-  #     "response": "CurrentUser",
-  #     "uuid": "user_e4dfcb4f-698d-4be4-8377-927e50b7d352"
-  # }
   def certs do
     [
       %{
