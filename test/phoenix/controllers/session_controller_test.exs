@@ -21,7 +21,7 @@ defmodule CoreIdentityElixir.Phoenix.Controllers.SessionControllerTest do
       assert current_user["email"] == "faranggorira@gmail.com"
       assert current_user["owner"] == "CoreIdentity.Identities.User"
       assert current_user["response"] == "CurrentUser"
-      assert current_user["uuid"] == "user_e4dfcb4f-698d-4be4-8377-927e50b7d352"
+      assert current_user["uuid"] != nil
     end
   end
 

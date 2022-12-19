@@ -8,7 +8,6 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
   end
 
   def request(:get, "localhost/api/v1/current_user/test_cookie_id", "", _headers, _params) do
-    # {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(current_user())}}
     current_user_response()
   end
 
@@ -73,7 +72,7 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
       "email" => email,
       "owner" => "CoreIdentity.Identities.User",
       "response" => "CurrentUser",
-      "uuid" => "user_e4dfcb4f-698d-4be4-8377-927e50b7d352"
+      "uuid" => generate_uuid(email)
     }
   end
 
@@ -177,6 +176,15 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
 
   defp fail_response do
     {:ok, %HTTPoison.Response{status_code: 400, body: "bad request"}}
+  end
+
+  defp generate_uuid(email) do
+   hash = :md5
+    |> :crypto.hash(email)
+    |> Base.encode16(case: :lower)
+
+    <<prefix::binary-size(8), one::binary-size(4), two::binary-size(4), three::binary-size(4), rest::binary>> = hash
+    "user_#{prefix}-#{one}-#{two}-#{three}-#{rest}"
   end
 
   defp token_response(email) do
