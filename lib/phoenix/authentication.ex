@@ -26,7 +26,7 @@ defmodule CoreIdentityElixir.Authentication do
   def login_user(conn, current_user) do
     user_return_to = get_session(conn, :user_return_to)
 
-    conn
+   conn
     |> renew_session()
     |> put_session(:current_user, current_user)
     |> fetch_flash()
@@ -56,7 +56,7 @@ defmodule CoreIdentityElixir.Authentication do
   they use the application at all, here would be a good place.
   """
   def require_authenticated_user(conn, _opts) do
-    if conn.assigns[:current_user] do
+    if conn.assigns[:"current_user"] do
       conn
     else
       conn

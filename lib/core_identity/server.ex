@@ -6,14 +6,11 @@ defmodule CoreIdentityElixir.CoreIdentity.Server do
   @default_api Application.compile_env(:core_identity_elixir, :core_identity_api_version)
 
   def authenticate(params) do
-    post("/users/authenticate", params, %{type: :public})
+    post("/users/authenticate", params, %{type: :private})
   end
 
   def base_url do
-    case Application.get_env(:core_identity_elixir, :url) do
-      url when is_binary(url) -> url
-      _ -> @default_url
-    end
+    @default_url
   end
 
   def delete(url) do

@@ -17,10 +17,10 @@ defmodule CoreIdentityElixir.Phoenix.Router do
 
   defmacro core_identity_routes do
     quote do
-      scope "/core_identity", alias: false, as: false do
-        delete("/sessions/destroy", CoreIdentityElixir.Phoenix.SessionController, :destroy)
-        get("/sessions/new", CoreIdentityElixir.Phoenix.SessionController, :new)
-        get("/sessions/create", CoreIdentityElixir.Phoenix.SessionController, :create)
+      scope "/sessions", alias: false, as: false do
+        delete("/destroy", CoreIdentityElixir.Phoenix.SessionController, :destroy)
+        get("/new", CoreIdentityElixir.Phoenix.SessionController, :new)
+        get("/create", CoreIdentityElixir.Phoenix.SessionController, :create)
       end
     end
   end

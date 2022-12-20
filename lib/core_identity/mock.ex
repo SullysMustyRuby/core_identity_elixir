@@ -4,7 +4,7 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
   end
 
   def request(:get, "localhost/api/v1/providers", "", _headers, _params) do
-    {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(providers())}}
+    {:ok, %HTTPoison.Response{status_code: 200, body: Jason.encode!(%{providers: providers()})}}
   end
 
   def request(:get, "localhost/api/v1/current_user/test_cookie_id", "", _headers, _params) do
