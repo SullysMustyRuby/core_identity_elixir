@@ -3,8 +3,8 @@ defmodule CoreIdentityElixir.CoreIdentity do
   An Elixir Package designed to make implementing CoreIdentity authentication easy and fast.
   In order to use this package you need to have an account with [CoreServer](https://core-apis.com/)
 
-  Currently this is only for internal uses. If you have a commercial interest please contact the Package Manager 
-  Erin Boeger through linkedIn or Github 
+  Currently this is only for internal uses. If you have a commercial interest please contact the Package Manager
+  Erin Boeger through linkedIn or Github
   """
 
   alias CoreIdentityElixir.CoreIdentity.{Server, Token}
@@ -26,6 +26,26 @@ defmodule CoreIdentityElixir.CoreIdentity do
   """
 
   def authenticate(params), do: Server.authenticate(params)
+
+  @doc """
+  Create a new user with email and password ad CoreIdentity. This will trigger CoreIdentity to send an
+  email message to the user. The email will have a link that will direct the user back to CoreIdentity.
+  CoreIdentity will then create a new user and respond with a redirect back to your application based on
+  the setting in the CoreIdentity dashboard.
+
+  ## Examples
+
+      iex> CoreIdentityElixir.CoreIdentity.create_user(%{email: "erin@core_apis.co.jp", password: "password"})
+      {:ok, "email verification request sent"}
+
+      iex> CoreIdentityElixir.CoreIdentity.authenticate(%{email: "erin@core_apis.co.jp", password: "existing_user"})
+			%{
+			"code" => "user_error",
+			"error" => %{"message" => %{"address" => ["has already been taken"]}},
+			"response" => "error"
+			}
+  """
+  def create_user(%{email: _email, password: _password} = params), do: Server.create_user(params)
 
   @doc """
   Get the current servers public key certificates. These certificates are used to verify a CoreIdentity
@@ -78,7 +98,7 @@ defmodule CoreIdentityElixir.CoreIdentity do
     |> Enum.find(fn %{"kid" => kid} -> kid == key_id end)
   end
 
-  def get_current_user(cookie_id), do: Server.get_current_user(cookie_id)
+  def get_current_user(user_token), do: Server.get_current_user(user_token)
 
   @doc """
   Parse and validate a JWT from CoreIdentity.

@@ -27,4 +27,4 @@ core_identity_elixir-*.tar
 /tmp
 
 Ignore DS files
-*.DS_Store
+*.DS_Storeg

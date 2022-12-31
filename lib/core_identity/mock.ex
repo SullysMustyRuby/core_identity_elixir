@@ -138,13 +138,13 @@ defmodule CoreIdentityElixir.CoreIdentity.Mock do
   def providers do
     [
       %{
-        logo_url: "https://stage-identity.hubsynch.com/images/facebook.png",
+        logo_url: "https://identity.core-apis.com/images/facebook.png",
         name: "facebook",
         request_url:
           "https://www.facebook.com/v9.0/dialog/oauth?client_id=2494840020818063&response_type=code&redirect_uri=https://stage-identity.hubsynch.com/api/v1/providers/oauth/response/facebook&scope=email&state=31E9B69E423EB0EBDE24FF8E0356973FC19821985E3D8DAD"
       },
       %{
-        logo_url: "https://stage-identity.hubsynch.com/images/google.png",
+        logo_url: "https://identity.core-apis.com/images/google.png",
         name: "google",
         request_url:
           "https://accounts.google.com/o/oauth2/v2/auth?client_id=221324018211-ustgqn7upord8ru5pbtnmj8u03dgd994.apps.googleusercontent.com&response_type=code&redirect_uri=https://stage-identity.hubsynch.com/api/v1/providers/oauth/response/google&scope=https://www.googleapis.com/auth/userinfo.email&state=31E9B69E423EB0EBDE24FF8E0356973FC19821985E3D8DAD"

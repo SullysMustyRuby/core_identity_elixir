@@ -13,6 +13,10 @@ defmodule CoreIdentityElixir.CoreIdentity.Server do
     @default_url
   end
 
+  def create_user(%{email: email, password: password}) do
+    post("/users", %{user: %{email: email, password: password}}, %{type: :public})
+  end
+
   def delete(url) do
     @http.delete("#{base_api_url()}#{url}", private_headers())
     |> parse_response()
@@ -62,12 +66,17 @@ defmodule CoreIdentityElixir.CoreIdentity.Server do
 
   defp get_headers(_), do: private_headers()
 
+  defp parse_body({:ok, %{"error" => message}}), do: {:error, message}
+
+  defp parse_body({:ok, body}), do: {:ok, body}
+
   defp parse_response({:ok, %HTTPoison.Response{status_code: 202, body: message}}),
     do: {:ok, message}
 
   defp parse_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
     body
     |> Jason.decode()
+    |> parse_body()
   end
 
   defp parse_response({:ok, %HTTPoison.Response{status_code: status_code, body: message}}),
